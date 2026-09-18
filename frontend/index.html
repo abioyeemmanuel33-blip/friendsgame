@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friends Game</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="home-page">
+  <main class="card">
+    <h1>Friends Game</h1>
+    <p class="tagline">RUN. HUNT. THINK. WIN.</p>
+
+    <label>
+      Your name
+      <input id="nameInput" type="text" maxlength="20" placeholder="e.g. Tobi" autocomplete="off" />
+    </label>
+
+    <div class="row">
+      <button id="createBtn" class="primary">Create Room</button>
+    </div>
+
+    <div class="divider"><span>or</span></div>
+
+    <div class="row">
+      <input id="codeInput" type="text" maxlength="20" placeholder="Room code (e.g. FRD-KA3M)" autocomplete="off" />
+      <button id="joinBtn">Join Room</button>
+    </div>
+
+    <p id="error" class="error" hidden></p>
+  </main>
+
+  <script src="/js/home.js"></script>
+</body>
+</html>

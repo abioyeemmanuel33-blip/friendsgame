@@ -1,0 +1,201 @@
+/* ---------- base ---------- */
+
+* { box-sizing: border-box; }
+
+:root {
+  --bg: #0f1116;
+  --panel: #1a1d26;
+  --panel-2: #232735;
+  --text: #e8eaf0;
+  --muted: #8b90a0;
+  --primary: #5b7cfa;
+  --primary-hover: #6e8bff;
+  --green: #3ddc84;
+  --red: #ff5c5c;
+  --border: #2a2f40;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- card ---------- */
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.card.wide { max-width: 560px; }
+
+h1 { margin: 0 0 4px; font-size: 28px; }
+h2 { margin: 0 0 12px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+.tagline {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+}
+
+/* ---------- inputs ---------- */
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus { border-color: var(--primary); }
+
+/* ---------- buttons ---------- */
+
+button {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+button:hover:not(:disabled) { background: #2c3145; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+button.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+button.primary:hover:not(:disabled) { background: var(--primary-hover); }
+
+button.secondary { background: transparent; }
+
+/* ---------- layout helpers ---------- */
+
+.row { display: flex; gap: 10px; align-items: center; }
+.row > input { flex: 1; }
+.row + .row { margin-top: 10px; }
+.row:first-of-type button { width: 100%; }
+
+.divider {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 20px 0;
+  position: relative;
+}
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 44%;
+  height: 1px;
+  background: var(--border);
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* ---------- errors ---------- */
+
+.error {
+  margin-top: 16px;
+  color: var(--red);
+  font-size: 14px;
+}
+
+/* ---------- lobby ---------- */
+
+.lobby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.room-code { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.room-code strong { color: var(--text); letter-spacing: 0.05em; }
+
+.status {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--muted);
+}
+.status.online { color: var(--green); }
+.status.offline { color: var(--red); }
+
+.muted { color: var(--muted); font-weight: normal; }
+
+.player-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.player-list .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.player-list .dot.ready { background: var(--green); }
+
+.player-list .name { flex: 1; font-weight: 600; }
+.player-list .badge {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+}
+.player-list .you {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.actions { display: flex; gap: 12px; }
+.actions button { flex: 1; }

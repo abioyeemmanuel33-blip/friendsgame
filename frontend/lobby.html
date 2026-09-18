@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lobby — Friends Game</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="lobby-page">
+  <main class="card wide">
+    <header class="lobby-header">
+      <div>
+        <h1>Lobby</h1>
+        <p class="room-code">Room: <strong id="roomCode">—</strong></p>
+      </div>
+      <div class="status" id="status">Connecting…</div>
+    </header>
+
+    <section class="players-section">
+      <h2>Players <span id="playerCount" class="muted">(0)</span></h2>
+      <ul id="playerList" class="player-list"></ul>
+    </section>
+
+    <section class="actions">
+      <button id="readyBtn" class="secondary">I'm Ready</button>
+      <button id="startBtn" class="primary" disabled>Start Game</button>
+    </section>
+
+    <p id="error" class="error" hidden></p>
+  </main>
+
+  <script src="/js/lobby.js"></script>
+</body>
+</html>
