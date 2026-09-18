@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game — Friends Game</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="game-page">
+  <main class="game-wrap">
+    <header class="game-header">
+      <span>Room: <strong id="roomCode">—</strong></span>
+      <span class="muted">Arrow keys / WASD to move — one tile at a time</span>
+    </header>
+
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+
+    <section class="game-footer">
+      <button id="backBtn" class="secondary">Back to Lobby</button>
+    </section>
+  </main>
+
+  <script src="/js/game.js"></script>
+</body>
+</html>

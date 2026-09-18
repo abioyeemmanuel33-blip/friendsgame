@@ -27,7 +27,7 @@ html, body {
   justify-content: center;
 }
 
-/* ---------- card ---------- */
+/* ---------- card (home + lobby) ---------- */
 
 .card {
   background: var(--panel);
@@ -42,7 +42,13 @@ html, body {
 .card.wide { max-width: 560px; }
 
 h1 { margin: 0 0 4px; font-size: 28px; }
-h2 { margin: 0 0 12px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
 
 .tagline {
   margin: 0 0 24px;
@@ -199,3 +205,59 @@ button.secondary { background: transparent; }
 
 .actions { display: flex; gap: 12px; }
 .actions button { flex: 1; }
+
+/* ---------- game page (canvas) ---------- */
+
+.game-page {
+  background: var(--bg);
+  align-items: flex-start;
+  padding: 24px 0;
+  min-height: 100vh;
+}
+
+.game-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  width: 800px;
+  max-width: 100%;
+  padding: 0 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.game-header strong { color: var(--text); }
+
+#gameCanvas {
+  background: #0f1116;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: block;
+  max-width: 100%;
+}
+
+.game-footer {
+  width: 800px;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---------- game page (placeholder from Step 5) ---------- */
+
+.placeholder {
+  margin: 24px 0;
+  padding: 32px 20px;
+  background: var(--panel-2);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.game-page .actions { margin-top: 12px; }

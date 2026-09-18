@@ -4,6 +4,7 @@
 // 3. Opens a WebSocket and stays in sync.
 // 4. Handles Ready toggle.
 // 5. Enables Start only for the host when all players are ready.
+// 6. On GAME_STARTED, redirects everyone to the game page.
 
 const params = new URLSearchParams(window.location.search);
 const roomCode = params.get("code");
@@ -25,11 +26,18 @@ function showError(message) {
   errorEl.hidden = false;
 }
 
+function clearError() {
+  errorEl.textContent = "";
+  errorEl.hidden = true;
+}
+
 if (!roomCode || !playerId) {
   showError("Missing room code or player id in the URL.");
 }
 
 roomCodeEl.textContent = roomCode || "—";
+
+// ---------- rendering ----------
 
 function renderRoom(room) {
   playerCountEl.textContent = `(${room.players.length})`;
@@ -81,6 +89,8 @@ function updateButtons(room) {
   startBtn.disabled = !(isHost && allReady && room.players.length >= 2);
 }
 
+// ---------- WebSocket ----------
+
 function connectWebSocket() {
   const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
   const url = `${wsProtocol}://${window.location.host}/ws/${roomCode}/${playerId}`;
@@ -118,11 +128,22 @@ function connectWebSocket() {
         refreshRoomState();
         break;
 
+      case "GAME_STARTED":
+        window.location.href = `/game.html?code=${encodeURIComponent(roomCode)}&player=${encodeURIComponent(playerId)}`;
+        break;
+
+      case "ERROR":
+        showError(msg.message);
+        startBtn.disabled = false;
+        break;
+
       default:
         break;
     }
   });
 }
+
+// ---------- REST fetch on load ----------
 
 async function refreshRoomState() {
   try {
@@ -138,14 +159,22 @@ async function refreshRoomState() {
   }
 }
 
+// ---------- button actions ----------
+
 readyBtn.addEventListener("click", () => {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  clearError();
   myReady = !myReady;
   ws.send(JSON.stringify({ type: "SET_READY", ready: myReady }));
 });
 
 startBtn.addEventListener("click", () => {
-  alert("Game would start here. (Not implemented yet — coming in a later step.)");
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  clearError();
+  startBtn.disabled = true;
+  ws.send(JSON.stringify({ type: "START_GAME" }));
 });
+
+// ---------- boot ----------
 
 refreshRoomState().then(connectWebSocket);
