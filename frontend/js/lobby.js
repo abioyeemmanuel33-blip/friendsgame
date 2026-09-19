@@ -1,10 +1,4 @@
-// lobby.js — logic for the lobby page.
-// 1. Reads room code + player id from URL query string.
-// 2. Fetches current room state via REST.
-// 3. Opens a WebSocket and stays in sync.
-// 4. Handles Ready toggle.
-// 5. Enables Start only for the host when all players are ready.
-// 6. On GAME_STARTED, redirects everyone to the game page.
+// lobby.js — lobby page logic.
 
 const params = new URLSearchParams(window.location.search);
 const roomCode = params.get("code");
@@ -36,8 +30,6 @@ if (!roomCode || !playerId) {
 }
 
 roomCodeEl.textContent = roomCode || "—";
-
-// ---------- rendering ----------
 
 function renderRoom(room) {
   playerCountEl.textContent = `(${room.players.length})`;
@@ -89,8 +81,6 @@ function updateButtons(room) {
   startBtn.disabled = !(isHost && allReady && room.players.length >= 2);
 }
 
-// ---------- WebSocket ----------
-
 function connectWebSocket() {
   const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
   const url = `${wsProtocol}://${window.location.host}/ws/${roomCode}/${playerId}`;
@@ -111,11 +101,7 @@ function connectWebSocket() {
 
   ws.addEventListener("message", (event) => {
     let msg;
-    try {
-      msg = JSON.parse(event.data);
-    } catch {
-      return;
-    }
+    try { msg = JSON.parse(event.data); } catch { return; }
 
     switch (msg.type) {
       case "ROOM_STATE":
@@ -143,8 +129,6 @@ function connectWebSocket() {
   });
 }
 
-// ---------- REST fetch on load ----------
-
 async function refreshRoomState() {
   try {
     const res = await fetch(`/rooms/${encodeURIComponent(roomCode)}`);
@@ -159,8 +143,6 @@ async function refreshRoomState() {
   }
 }
 
-// ---------- button actions ----------
-
 readyBtn.addEventListener("click", () => {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   clearError();
@@ -174,7 +156,5 @@ startBtn.addEventListener("click", () => {
   startBtn.disabled = true;
   ws.send(JSON.stringify({ type: "START_GAME" }));
 });
-
-// ---------- boot ----------
 
 refreshRoomState().then(connectWebSocket);
