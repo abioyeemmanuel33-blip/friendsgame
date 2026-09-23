@@ -374,3 +374,109 @@ button.secondary { background: transparent; }
   margin: 0;
   text-align: center;
 }
+
+/* ---------- status bar (active power-ups) ---------- */
+
+.status-bar {
+  width: 800px;
+  max-width: 100%;
+  min-height: 28px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-bar .effect {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+}
+
+.status-bar .effect.speed  { color: #ffb84d; border-color: #ffb84d; }
+.status-bar .effect.shield { color: #5b7cfa; border-color: #5b7cfa; }
+.status-bar .effect.frozen { color: #22d3ee; border-color: #22d3ee; }
+
+/* ---------- touch controls (mobile only) ---------- */
+
+.touch-controls {
+  display: none;                 /* hidden by default; shown only on .touch devices */
+  width: 240px;
+  height: 240px;
+  margin: 12px auto 0;
+  position: relative;
+  touch-action: manipulation;
+}
+
+body.touch .touch-controls { display: block; }
+
+.dpad {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.dpad:active { background: var(--primary); border-color: var(--primary); }
+
+/* Position the four arrows around the center. Layout is 240x240. */
+.dpad-up    { top: 0;    left: 82px; }
+.dpad-left  { top: 82px; left: 0; }
+.dpad-right { top: 82px; left: 164px; }
+.dpad-down  { top: 164px; left: 82px; }
+
+/* ---------- joystick ---------- */
+
+.joystick-base {
+  position: absolute;
+  top: 82px;                        /* matches the gap between arrows */
+  left: 82px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;                       /* above the arrows so it captures touches */
+  touch-action: none;               /* disable browser gesture handling */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.joystick-knob {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.05s linear;
+  pointer-events: none;             /* we listen on the base, not the knob */
+}
+
+/* Shrink the canvas on small screens so the controls fit without scrolling. */
+@media (max-width: 900px) {
+  #gameCanvas {
+    width: 90vw;
+    height: 90vw;
+    max-width: 500px;
+    max-height: 500px;
+  }
+}

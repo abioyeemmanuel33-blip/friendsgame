@@ -5,18 +5,6 @@ maps.py — server-side map definitions and match-map generation.
 import random
 
 
-# ---------- base map ----------
-# #  = wall / building / tree / water   (impassable)
-# .  = grass / road                    (walkable)
-# S  = spawn                            (walkable, row 1 only)
-# F  = finish                           (walkable, row 19 col 9)
-#
-# Structure:
-#   - Row 1: 9 spawn cells
-#   - Rows 5, 9, 13: open crossing streets (full width walkable)
-#   - Other rows: buildings forming corridors for 5 vertical routes
-#   - Row 19: finish
-
 BASE_MAP = [
     "####################",
     "#S.S.S.S.S.S.S.S.S.#",
@@ -52,6 +40,7 @@ def get_tile(hazard_map: list[str], row: int, col: int) -> str | None:
     return line[col]
 
 
+# Hazard chars block movement; power-up chars do NOT block (you walk onto them).
 BLOCKING_TILES = {"#", "X", "Y", "Z"}
 
 
@@ -62,8 +51,16 @@ def is_walkable(hazard_map: list[str], row: int, col: int) -> bool:
     return ch not in BLOCKING_TILES
 
 
+HAZARD_CHARS = ["X", "Y", "Z"]
+POWERUP_CHARS = ["A", "B", "C"]
+
+
 def is_hazard(ch: str | None) -> bool:
     return ch in {"X", "Y", "Z"}
+
+
+def is_powerup(ch: str | None) -> bool:
+    return ch in {"A", "B", "C"}
 
 
 def is_finish_tile(hazard_map: list[str], row: int, col: int) -> bool:
@@ -78,21 +75,14 @@ def spawn_positions() -> list[tuple[int, int]]:
     return positions
 
 
-# ---------- match map ----------
-
 def generate_match_map() -> list[str]:
-    """
-    Return a copy of the base map. Dynamic hazards are added later.
-    """
     return list(BASE_MAP)
 
 
-# ---------- dynamic hazard helpers ----------
-
-HAZARD_CHARS = ["X", "Y", "Z"]
-
+# ---------- dynamic tile helpers ----------
 
 def list_road_tiles(hazard_map: list[str]) -> list[tuple[int, int]]:
+    """Tiles that are plain road and can receive a hazard or power-up."""
     tiles: list[tuple[int, int]] = []
     for r, line in enumerate(hazard_map):
         if r == 1:
@@ -116,6 +106,15 @@ def list_active_hazards(hazard_map: list[str]) -> list[tuple[int, int]]:
     return positions
 
 
+def list_active_powerups(hazard_map: list[str]) -> list[tuple[int, int]]:
+    positions: list[tuple[int, int]] = []
+    for r, line in enumerate(hazard_map):
+        for c, ch in enumerate(line):
+            if ch in POWERUP_CHARS:
+                positions.append((r, c))
+    return positions
+
+
 def pick_random_tile(
     hazard_map: list[str],
     forbidden: set[tuple[int, int]] | None = None,
@@ -131,14 +130,25 @@ def pick_random_tile(
     return random.choice(candidates)
 
 
-def put_hazard(hazard_map: list[str], row: int, col: int, ch: str) -> None:
+def put_tile(hazard_map: list[str], row: int, col: int, ch: str) -> None:
     line = list(hazard_map[row])
     line[col] = ch
     hazard_map[row] = "".join(line)
 
 
-def clear_hazard(hazard_map: list[str], row: int, col: int) -> None:
+def clear_dynamic_tile(hazard_map: list[str], row: int, col: int) -> None:
+    """Reset a tile to plain road if it currently holds a hazard or power-up."""
     line = list(hazard_map[row])
-    if line[col] in HAZARD_CHARS:
+    if line[col] in HAZARD_CHARS or line[col] in POWERUP_CHARS:
         line[col] = "."
         hazard_map[row] = "".join(line)
+
+
+# ---------- legacy aliases (kept for main.py compatibility) ----------
+
+def put_hazard(hazard_map: list[str], row: int, col: int, ch: str) -> None:
+    put_tile(hazard_map, row, col, ch)
+
+
+def clear_hazard(hazard_map: list[str], row: int, col: int) -> None:
+    clear_dynamic_tile(hazard_map, row, col)

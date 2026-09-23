@@ -21,12 +21,16 @@ class Player(BaseModel):
 
     finished_at: float | None = None
 
-    # Original spawn position (set at game start; used for respawn).
     spawn_row: int = 0
     spawn_col: int = 0
 
-    # Death / respawn tracking. None when alive.
     dead_until: float | None = None
+
+    # ---------- power-up state ----------
+    # Epoch seconds until each effect expires. None = not active.
+    speed_until: float | None = None
+    shield_until: float | None = None
+    frozen_until: float | None = None
 
 
 class Room(BaseModel):
@@ -36,7 +40,6 @@ class Room(BaseModel):
     status: str = "lobby"
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    # Server-supplied map for the current match.
     hazard_map: list[str] | None = None
 
 
